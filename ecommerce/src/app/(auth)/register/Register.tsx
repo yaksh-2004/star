@@ -129,6 +129,7 @@ export default function Register() {
           >
             <option value="Buyer">Buyer</option>
             <option value="Seller">Seller</option>
+            <option value="ADMIN">Admin</option>
           </select>
 
           {error && <p className="text-red-500">{error}</p>}
