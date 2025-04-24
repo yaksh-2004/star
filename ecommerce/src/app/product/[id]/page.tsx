@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+
 interface Product {
     id: number;
     description: string;
@@ -12,6 +13,9 @@ interface Product {
     images: string[];
   }
    import { useParams } from 'next/navigation'
+import { useCart } from '@/app/context/CartContext';
+//import { addToCart } from '@/lib/api';
+
 
 
 export default function ProductInfoPage() {
@@ -44,25 +48,49 @@ export default function ProductInfoPage() {
     fetchProduct();
   }, [params.id]);
 
-  const addToCart = () => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart.push({ productId: product?.id, quantity });
-    localStorage.setItem('cart', JSON.stringify(cart));
 
 
-  };
+const { addToCart } = useCart()
 
+const handleAddToCart = () => {
+  if (!product) return; // Ensure product is not null
+  addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    image: product.images[0], // Fixed property name to match 'images'
+    quantity: quantity, // Fixed variable name to match 'quantity'
+  });
+  router.push('/cart');
+}
   
 
   if (!product) return <p>Loading...</p>;
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
-      <img src={product.images[0]} alt={product.name} className="w-full h-80 object-cover rounded-lg mb-4" />
+      <div className='flex gap-8'>
+        <div>
+<img src={product.images[0]} alt="" className='w-[80px] mb-3'/>
+<img src={product.images[0]} alt="" className='w-[80px] mb-3'/>
+<img src={product.images[0]} alt="" className='w-[80px] mb-3'/>
+<img src={product.images[0]} alt="" className='w-[80px] mb-3'/>
+
+        </div>
+        <div>
+
+        <img src={product.images[1]} alt="" className=''/>
+
+        </div>
+        
+      </div>
+      {/* <img src={product.images[0]} alt={product.name} className="w-full h-80 object-cover rounded-lg mb-4" />
+      <img src={product.images[1]} alt={product.name} className="w-full h-80 object-cover rounded-lg mb-4" /> */}
+
       <h1 className="text-2xl font-semibold mb-2">{product.name}</h1>
       <p className="text-gray-500 mb-4">{product.description}</p>
       <p className="text-xl font-bold mb-4">${product.price}</p>
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <label className="block text-sm font-medium">Quantity</label>
         <input
           type="number"
@@ -71,9 +99,9 @@ export default function ProductInfoPage() {
           onChange={(e) => setQuantity(Number(e.target.value))}
           className="w-full p-2 border rounded-md mt-1"
         />
-      </div>
+      </div> */}
       <button
-        onClick={addToCart}
+        onClick={handleAddToCart}
         className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
       >
         Add to Cart
