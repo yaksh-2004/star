@@ -1,43 +1,171 @@
-'use client'
 
-import { useCart } from "../context/CartContext"
-export default function CartPage() {
-  const { cart, increaseQuantity, decreaseQuantity, removeFromCart } = useCart()
+"use client";
 
-  const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+type CartItem = {
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  productId: number;
+  quantity: number;
+  subtotal: number;
+};
+
+
+
+  
+
+const CartPage = () => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const getToken = () => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("token");
+    }
+    return null;
+  };
+
+  const fetchCart = async () => {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      const res = await fetch("http://localhost:8000/api/cart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setCartItems(data.items);
+    } catch (err) {
+      console.error("Failed to fetch cart", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateQuantity = async (id: number, quantity: number) => {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ quantity }),
+      });
+      fetchCart();
+    } catch (err) {
+      console.error("Failed to update quantity", err);
+    }
+  };
+
+  const removeItem = async (id: number) => {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchCart();
+    } catch (err) {
+      console.error("Failed to remove item", err);
+    }
+  };
+
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.quantity * item.price,
+    0
+  );
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+  console.log(cartItems);
+  
+
+  if (loading) return <p className="text-center mt-10">Loading cart...</p>;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Cart</h1>
-      {cart.length === 0 ? (
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+
+      {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <div className="space-y-4">
-          {cart.map(item => (
-            <div key={item.id} className="flex gap-4 items-center border p-4 rounded">
-              <img src={item.image} className="w-24 h-24 object-cover rounded" />
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
-                <p>${item.price}</p>
-                <div className="flex items-center mt-2 gap-2">
-                  <button onClick={() => decreaseQuantity(item.id)}>-</button>
+        <>
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between border p-4 rounded mb-4"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-20 h-20 object-cover rounded"
+              />
+              <div className="flex-1 ml-4">
+                <h2 className="font-semibold">{item.name}</h2>
+                <p>Price: ₹{item.price}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    onClick={() =>
+                      item.quantity > 1 &&
+                      updateQuantity(item.id, item.quantity - 1)
+                    }
+                    className="px-2 py-1 bg-gray-200 rounded"
+                  >
+                    -
+                  </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => increaseQuantity(item.id)}>+</button>
-                  <button onClick={() => removeFromCart(item.id)} className="ml-4 text-red-500">
-                    Remove
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="px-2 py-1 bg-gray-200 rounded"
+                  >
+                    +
                   </button>
                 </div>
+                <button
+                  onClick={() => removeItem(item.id)}
+                  className="text-red-600 text-sm mt-2"
+                >
+                  Remove
+                </button>
               </div>
               <div className="text-right">
-                <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                <p className="font-semibold">
+                  ₹{item.price * item.quantity}
+                </p>
               </div>
             </div>
           ))}
 
-          <div className="text-right mt-6 text-xl font-bold">Total: ${subtotal.toFixed(2)}</div>
-        </div>
+          <div className="text-right mt-6">
+            <h3 className="text-xl font-bold">Total: ₹{subtotal}</h3>
+            <button
+              onClick={() => router.push("/checkout")}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Place Order
+            </button>
+          </div>
+        </>
       )}
     </div>
-  )
-}
+  );
+};
+
+export default CartPage;
 

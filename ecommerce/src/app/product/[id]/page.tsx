@@ -13,10 +13,6 @@ interface Product {
     images: string[];
   }
    import { useParams } from 'next/navigation'
-import { useCart } from '@/app/context/CartContext';
-//import { addToCart } from '@/lib/api';
-
-
 
 export default function ProductInfoPage() {
     const params = useParams()
@@ -42,26 +38,31 @@ export default function ProductInfoPage() {
         }
       } catch (err) {
         console.error(err);
-       // alert('Error fetching product');
       }
     };
     fetchProduct();
   }, [params.id]);
 
 
+const handleAddToCart = async () => {
+  try{
 
-const { addToCart } = useCart()
 
-const handleAddToCart = () => {
-  if (!product) return; // Ensure product is not null
-  addToCart({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    image: product.images[0], // Fixed property name to match 'images'
-    quantity: quantity, // Fixed variable name to match 'quantity'
-  });
-  router.push('/cart');
+    const res= await fetch(`http://localhost:8000/api/cart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({ productId: product?.id, quantity }),
+    });
+    alert('Product added to cart');
+    router.push('/cart');
+  }
+  catch(err){
+    console.error(err);
+  }
+  
 }
   
 
@@ -79,7 +80,7 @@ const handleAddToCart = () => {
         </div>
         <div>
 
-        <img src={product.images[1]} alt="" className=''/>
+        <img src={product.images[0]} alt="" className=''/>
 
         </div>
         

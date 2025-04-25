@@ -30,6 +30,18 @@ export const getCart = async () => {
  
   return res.data;
 };
+export const getBuyerOrders = async (token: string) => {
+    const res = await fetch(`http://localhost:8000/api/orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    if (!res.ok) throw new Error("Failed to fetch orders");
+  
+    return res.json();
+  };
+  
 
 
 

@@ -7,6 +7,7 @@ export default function Admin() {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [quantity, setQuantity] = useState("");
@@ -38,6 +39,7 @@ export default function Admin() {
     formData.append("description", desc)
     formData.append("price", price);
     formData.append("quantity", quantity);
+    formData.append("category", category);
     images.forEach(img => {
       formData.append("images", img);
     });
@@ -65,6 +67,16 @@ export default function Admin() {
           className="w-full p-2 border rounded"
           required
         />
+       <select name="" id="" onChange={e => setCategory(e.target.value)} className="w-full p-2 border rounded">
+        <option value="">Select Category</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+        <option value="Sports & Outdoors">Sports & Outdoors</option>
+        <option value="Books">Books</option>
+        <option value="Toys & Games">Toys & Games</option>
+        <option value="Footwear">Footwear</option>
+        </select>
 
         <textarea
           placeholder="Description"
