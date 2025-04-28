@@ -85,6 +85,7 @@ interface Product {
   description: string;
   price: number;
   quantity: number;
+  category:string
 }
 
 export default function AllProductsPage() {
@@ -108,11 +109,11 @@ export default function AllProductsPage() {
       const res = await fetch(`http://localhost:8000/api/products/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();
-      if (res.status === 200) {
+      if (res.status=== 200) {
 
         setProducts(products.filter((product) => product.id !== id));
         alert("Product deleted successfully");

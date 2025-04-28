@@ -2,7 +2,7 @@ export interface RegisterTypes {
     name : string,
     email : string,
     password : string,
-    role : "Buyer" | "Seller"
+    role : "Buyer" | "Seller" | "ADMIN"
 }
 
 export interface LoginTypes {

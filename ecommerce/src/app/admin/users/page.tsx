@@ -1,13 +1,15 @@
 "use client";
-import { getAllUsers } from "@/lib/api";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<
-    { id: string; name: string; email: string; role: string }[]
+    { id: number; name: string; email: string; role: string }[]
   >([]);
   console.log(users);
+  console.log(users);
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,7 +26,7 @@ export default function UsersPage() {
       
 
         if (res.status === 200) {
-          // alert("Products loaded successfully");
+      
           setUsers(res.data);
         } else {
           alert("Failed to load Users");
@@ -36,6 +38,31 @@ export default function UsersPage() {
     };
     fetchUsers();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/admin/users/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(res);
+      
+      if (res.status === 200) {
+        setUsers(users.filter((user) => Number(user.id) !== id));
+        alert("User deleted successfully");
+      } else {
+        alert("Failed to delete User");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting User");
+    }
+  }
+
 
   return (
     <div className="p-4">
@@ -52,6 +79,9 @@ export default function UsersPage() {
             <p>
               <b>Role:</b> {user.role}
             </p>
+            <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => handleDelete(Number(user.id))}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>

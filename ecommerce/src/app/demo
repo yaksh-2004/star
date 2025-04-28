@@ -1,157 +1,12 @@
-// import Image from "next/image";
-// import Link from "next/link";
-
-// export default function Home() {
-//   return (
-//    <>
-
-//    <div className="flex flex-row gap-4 mr-0.5 ml-0.5 mt-0.5">
-//    Home Page
-//    <Link href={"/register"}>Register Page</Link>
-//    <Link href={"/login"}>Login Page</Link>
-//    </div>
-
-//    </>
-//   );
-// }
-
-"use client";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-
-interface Product {
-  id: number;
-  description: string;
-  name: string;
-  price: number;
-  quantity: number;
-  images: string[];
-  category: string;
-}
-const categories = [
-  "All",
-  "Clothing",
-  "Electronics",
-  "Home & Kitchen",
-  "Beauty & Personal Care",
-  "Sports & Outdoors",
-  "Books",
-  "Toys & Games",
-  "Baby & Kids",
-  "Footwear",
-];
-
-export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/api/products");
-        const data = await res.json();
-        console.log(data.data);
-
-        if (res.ok) {
-          // alert("Products loaded successfully");
-          setProducts(data.data);
-        } else {
-          alert("Failed to load products");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error fetching products");
-      }
-    };
-    fetchProducts();
-  }, []);
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
-
-  return (
-    <div className=" bg-white space-y-6">
-    
-      {/* Categories */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-full ${
-              selectedCategory === category
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Available Products
-      </h1>
-      <div className="flex flex-wrap gap-8 justify-start items-center">
-        {filteredProducts.map((product) => {
-          return (
-            <div
-              key={product.id}
-              className=" shadow-md rounded-lg p-4 w-[200px]"
-            >
-              <div className="bg-gray-100 rounded-lg w-[100%]">
-                <img
-                  src={product?.images[0]}
-                  alt={product.name}
-                  className="w-[100%] h-40 object-cover rounded-lg mb-4"
-                />
-              </div>
-              <div className="flex flex-col">
-                {product.name}
-                <span className="text-sm text-gray-500">
-                  {product.description}
-                </span>
-                <span className="text-sm text-gray-500">
-                  Quantity: {product.quantity}
-                </span>
-                <span className="text-lg font-semibold mt-2">
-                  Price: ${product.price}
-                </span>
-                <Link
-                  href={`/product/${product.id}`}
-                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg text-center"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <Footer />
-    </div>
-  );
-}
 
 
-
-
-
-
-
-
-// "use client";
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 
 // const HomePage = () => {
 //   // State for categories, filters, and products
-//   const [categories, setCategories] = useState<string[]>([]);
-//   const [products, setProducts] = useState<{ id: number; name: string; description: string; price: number; image: string }[]>([]);
+//   const [categories, setCategories] = useState([]);
+//   const [products, setProducts] = useState([]);
 //   const [filters, setFilters] = useState({
 //     category: '',
 //     minPrice: 0,
@@ -160,17 +15,16 @@ export default function HomePage() {
 //     sortBy: 'price',
 //     order: 'desc',
 //   });
-//   console.log(products);
   
 //   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
 
-
+//   // Fetch categories (You can replace this with an API if needed)
 //   useEffect(() => {
 //     const fetchCategories = async () => {
 //       try {
 //         // Assuming you have a predefined list of categories
-//         const response = await axios.get('http://localhost:8000/api/product-filters'); 
-//         setCategories(['Electronics', 'Clothing', 'Books','Footwear', 'Home & Kitchen']); 
+//         const response = await axios.get('http://localhost:8000/api/product-filters'); // Add endpoint if available
+//         setCategories(['Electronics', 'Clothing', 'Books', 'Home & Kitchen']); // Replace with response data if dynamic
 //       } catch (error) {
 //         console.error('Error fetching categories:', error);
 //       }
@@ -193,7 +47,7 @@ export default function HomePage() {
 //           order,
 //         },
 //       });
-//       setProducts(response.data.data);
+//       setProducts(response.data); // Assuming response contains the product list
 //     } catch (error) {
 //       console.error('Error fetching products:', error);
 //     }
@@ -205,7 +59,7 @@ export default function HomePage() {
 //   }, [filters]);
 
 //   // Handle filter change
-//   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+//   const handleFilterChange = (e) => {
 //     setFilters({
 //       ...filters,
 //       [e.target.name]: e.target.value,
@@ -213,17 +67,12 @@ export default function HomePage() {
 //   };
 
 //   // Handle price range change
-//   interface PriceRange {
-//     min: number;
-//     max: number,
-//   }
-
-//   const handlePriceRangeChange = (min: number, max: number): void => {
-//     setFilters((prevFilters) => ({
-//       ...prevFilters,
+//   const handlePriceRangeChange = (min, max) => {
+//     setFilters({
+//       ...filters,
 //       minPrice: min,
 //       maxPrice: max,
-//     }));
+//     });
 //   };
 
 //   return (
@@ -251,14 +100,14 @@ export default function HomePage() {
 //             <input
 //               type="number"
 //               value={filters.minPrice}
-//               onChange={(e) => handlePriceRangeChange(Number(e.target.value), filters.maxPrice)}
+//               onChange={(e) => handlePriceRangeChange(e.target.value, filters.maxPrice)}
 //               className="p-2 border border-gray-300 rounded"
 //               placeholder="Min Price"
 //             />
 //             <input
 //               type="number"
 //               value={filters.maxPrice}
-//               onChange={(e) => handlePriceRangeChange(filters.minPrice, Number(e.target.value))}
+//               onChange={(e) => handlePriceRangeChange(filters.minPrice, e.target.value)}
 //               className="p-2 border border-gray-300 rounded"
 //               placeholder="Max Price"
 //             />

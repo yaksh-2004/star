@@ -1,10 +1,15 @@
+import AdminSidebar from '@/components/AdminSidebar'
 import React from 'react'
-import Admin from './Admin'
+// import Admin from './CreateProduct'
 
 const admin = () => {
   return (
     <div>
-        <Admin />
+       {/* <AdminSidebar /> */}
+       <div>
+        <h1 className="text-gray">Welcome to the admin panel!</h1>
+        
+       </div>
     </div>
   )
 }

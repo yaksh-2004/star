@@ -1,10 +1,11 @@
 "use client";
 
-
+import { getUser } from "@/lib/api";
 import { LoginUser } from "@/lib/auth";
 import { LoginTypes } from "@/type";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 import React, { useState } from "react";
 
 export default function Login() {
@@ -13,41 +14,34 @@ export default function Login() {
     password: "",
   });
 
-
+  const router = useRouter();
 
   const hanldeChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    
     });
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-     try{
-          const res = await LoginUser(formData)
-          localStorage.setItem("token", res.data.token)
-         
-          alert(res.data?.message)
-          
-        }catch(err){
-            alert("Login failed")
-            console.log(err)
-        }
-        redirect("/")
-    
-   
-    //   if (res.status === 201) {
-    //     alert("Login successful");
-    //     redirect("/");   
-    //   }else{
-    //     alert("Login failed");
-    //     redirect("/login");
-    //   }
-    // };
-   
+    try {
+      const res = await LoginUser(formData);
+      localStorage.setItem("token", res.data.token);
+      const second = await getUser();
+
+      if (second.data.role === "ADMIN") {
+        alert("Login successful");
+        router.push("/admin");
+      } else {
+        alert("Login successful");
+        router.push("/");
+      }
+    } catch (err) {
+      alert("Login failed");
+      console.log(err);
+    }
   };
 
   return (
@@ -76,9 +70,10 @@ export default function Login() {
           </button>
         </form>
         <div className="text-center my-2">
-        <span>Don't have an account ? </span>
-        <Link href="/register" className="text-blue-500">Register</Link>
-
+          <span>Don't have an account ? </span>
+          <Link href="/register" className="text-blue-500">
+            Register
+          </Link>
         </div>
       </div>
     </div>

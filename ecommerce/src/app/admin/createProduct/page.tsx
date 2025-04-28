@@ -55,7 +55,7 @@ export default function Admin() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded mt-10">
+    <div className="max-w-2xl mx-auto p-2 bg-white shadow-md rounded ">
       <h1 className="text-2xl font-bold mb-6">Create Product</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
