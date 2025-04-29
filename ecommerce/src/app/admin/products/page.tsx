@@ -1,79 +1,3 @@
-// "use client";
-// import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation";
-// import { deleteProduct, getAllProducts } from "@/lib/api";
-
-// export default function AdminProductsPage() {
-//   const [products, setProducts] = useState<{ id: number; name: string; price: number; images: string[] }[]>([]);
-//   const router = useRouter();
-//   console.log(products);
-  
-
-//   useEffect(() => {
-//     getAllProducts().then(res=> setProducts(res.data));
-//   }, []);
-
-//   const handleDelete = async (id: number) => {
-//     const res=await deleteProduct(id);
-//     if(res===200){
-//         await getAllProducts().then(res=> setProducts(res.data));
-//     }
-//     // setProducts(products.filter((p: any) => p.id !== id));
-//   };
-
-//   return (
-//     <div className="p-4">
-//       <h1 className="text-xl font-bold mb-4">Product Management</h1>
-//       <ul className="space-y-4">
-//         {products.map((product) => (
-//           <li
-//             key={product.id}
-//             className="border p-3 rounded-md flex justify-between"
-//           >
-//             <div>
-//               <p>
-//                 <p>
-//                      <b>
-//                         Image:<img src={product.images[0]} alt={product.name} width={50} height={50} />
-//                      </b>
-                     
-//                 </p>
-//                 <b>Name:</b> {product.name}
-//               </p>
-//               <p>
-//                 <b>Price:</b> ${product.price}
-//               </p>
-//             </div>
-//             <div className="space-x-2">
-//               <button
-//                 className="bg-blue-500 text-white px-3 py-1 rounded"
-//                 onClick={() =>
-//                   router.push(`/admin/products/edit/${product.id}`)
-//                 }
-//               >
-//                 Edit
-//               </button>
-//               <button
-//                 className="bg-red-500 text-white px-3 py-1 rounded"
-//                 onClick={() => handleDelete(product.id)}
-//               >
-//                 Delete
-//               </button>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
 
 "use client";
 
@@ -85,7 +9,8 @@ interface Product {
   description: string;
   price: number;
   quantity: number;
-  category:string
+  category:string;
+  images: string[];
 }
 
 export default function AllProductsPage() {
@@ -105,6 +30,8 @@ export default function AllProductsPage() {
   };
 
   const handleDelete = async (id: number) => {
+    console.log(id);
+    
     try {
       const res = await fetch(`http://localhost:8000/api/products/${id}`, {
         method: "DELETE",
@@ -115,7 +42,7 @@ export default function AllProductsPage() {
       const data = await res.json();
       if (res.status=== 200) {
 
-        setProducts(products.filter((product) => product.id !== id));
+        setProducts(products.filter((product) => Number(product.id) !== id));
         alert("Product deleted successfully");
         // const res = await fetchProducts();
         // setProducts(res.data);
@@ -169,6 +96,7 @@ export default function AllProductsPage() {
             <th className="p-2">Name</th>
             <th className="p-2">Price</th>
             <th className="p-2">Quantity</th>
+            <th className="p-2">Category</th>
             <th className="p-2">Actions</th>
           </tr>
         </thead>
@@ -204,6 +132,7 @@ export default function AllProductsPage() {
                   product.quantity
                 )}
               </td>
+              <td className="p-2">{product.category}</td>
               <td className="p-2 space-x-2">
                 {editingProduct?.id === product.id ? (
                   <>

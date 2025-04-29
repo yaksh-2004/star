@@ -63,14 +63,17 @@ export default function ProductInfoPage() {
   if (!product) return <p>Loading...</p>;
 
   return (
+    <div className="h-screen flex flex-col items-center justify-center">
 
- <div>
+   
+
+ <div className="flex items-center">
   <div>
-    <Link href="/" className="text-blue-500 hover:underline">
+    <Link href="/" className="text-blue-500 hover:underline absolute top-20">
       Back to Products
     </Link>
   </div>
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mt-20">
    
       <div className="flex gap-8">
         <div>
@@ -105,6 +108,7 @@ export default function ProductInfoPage() {
       >
         Add to Cart
       </button>
+    </div>
     </div>
     </div>
   );

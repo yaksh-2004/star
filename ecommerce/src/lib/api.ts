@@ -1,7 +1,4 @@
 import axios from "axios";
-import { log } from "console";
-
-
  const api = axios.create({
     baseURL: "http://localhost:8000/api",
     

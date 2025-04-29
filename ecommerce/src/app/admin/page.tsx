@@ -5,7 +5,7 @@ import React from 'react'
 const admin = () => {
   return (
     <div>
-       {/* <AdminSidebar /> */}
+   
        <div>
         <h1 className="text-gray">Welcome to the admin panel!</h1>
         

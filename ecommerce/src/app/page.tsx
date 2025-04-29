@@ -1,327 +1,189 @@
-// import Image from "next/image";
-// import Link from "next/link";
-
-// export default function Home() {
-//   return (
-//    <>
-
-//    <div className="flex flex-row gap-4 mr-0.5 ml-0.5 mt-0.5">
-//    Home Page
-//    <Link href={"/register"}>Register Page</Link>
-//    <Link href={"/login"}>Login Page</Link>
-//    </div>
-
-//    </>
-//   );
-// }
 
 "use client";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
+
+import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-interface Product {
-  id: number;
-  description: string;
-  name: string;
-  price: number;
-  quantity: number;
-  images: string[];
-  category: string;
-}
-const categories = [
-  "All",
-  "Clothing",
-  "Electronics",
-  "Home & Kitchen",
-  "Beauty & Personal Care",
-  "Sports & Outdoors",
-  "Books",
-  "Toys & Games",
-  "Baby & Kids",
-  "Footwear",
-];
+const Home = () => {
+  const [productData, setProductData] = useState<any[]>([]);
+  const [filters, setFilters] = useState({
+    sortBy: "",
+    order: "",
+    minPrice: "",
+    maxPrice: "",
+    category: "",
+    search: "",
+  });
 
-export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const fetchAllProduct = async () => {
+    try {
+      const queryParams = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+          queryParams.append(key, value);
+        }
+      });
+
+      const res = await axios.get(
+        `http://localhost:8000/api/product-filters?${queryParams.toString()}`
+      );
+
+      setProductData(res.data.products || res.data.data);
+    } catch (err) {
+      console.log("Something went wrong", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/api/products");
-        const data = await res.json();
-        console.log(data.data);
-
-        if (res.ok) {
-          // alert("Products loaded successfully");
-          setProducts(data.data);
-        } else {
-          alert("Failed to load products");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error fetching products");
-      }
-    };
-    fetchProducts();
-  }, []);
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
+    fetchAllProduct();
+  }, [filters]);
 
   return (
-    <div className=" bg-white space-y-6">
+    <div className="flex justify-start mx-auto min-h-screen py-8 px-4 gap-8 mt-16 max-w-[1440px]">
     
-      {/* Categories */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-full ${
-              selectedCategory === category
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+      <aside className="w-[300px] bg-white rounded-xl p-6 h-fit sticky top-24 shadow-md border border-gray-100">
+        <h1 className="text-2xl font-bold mb-8 text-gray-800">Filters</h1>
 
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Available Products
-      </h1>
-      <div className="flex flex-wrap gap-8 justify-start items-center">
-        {filteredProducts.map((product) => {
-          return (
-            <div
-              key={product.id}
-              className=" shadow-md rounded-lg p-4 w-[200px]"
-            >
-              <div className="bg-gray-100 rounded-lg w-[100%]">
-                <img
-                  src={product?.images[0]}
-                  alt={product.name}
-                  className="w-[100%] h-40 object-cover rounded-lg mb-4"
-                />
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={filters.search}
+          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          className="w-full mb-6 p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+
+       
+        <div className="mb-6">
+          <label className="text-gray-700 font-semibold mb-3 block">
+            Categories
+          </label>
+          <select
+            value={filters.category}
+            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="">All Categories</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Home & Kitchen">Home & Kitchen</option>
+            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+            <option value="Sports & Outdoors">Sports & Outdoors</option>
+            <option value="Books">Books</option>
+            <option value="Toys & Games">Toys & Games</option>
+            <option value="Baby & Kids">Baby & Kids</option>
+            <option value="Footwear">Footwear</option>
+          </select>
+        </div>
+
+   
+        <div className="mb-6">
+          <label className="text-gray-700 font-semibold mb-3 block">
+            Price Range
+          </label>
+          <div className="flex gap-3">
+            <input
+              type="number"
+              placeholder="Min"
+              value={filters.minPrice}
+              onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
+              className="w-1/2 p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              value={filters.maxPrice}
+              onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
+              className="w-1/2 p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+
+        <div className="mb-6">
+          <label className="text-gray-700 font-semibold mb-3 block">
+            Sort By
+          </label>
+          <select
+            value={filters.sortBy}
+            onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="">Select Option</option>
+            <option value="price">Price</option>
+            <option value="createdAt">Newest</option>
+          </select>
+        </div>
+
+        <div className="mb-6">
+          <label className="text-gray-700 font-semibold mb-3 block">Order</label>
+          <select
+            value={filters.order}
+            onChange={(e) => setFilters({ ...filters, order: e.target.value })}
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="">Select</option>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
+          </select>
+        </div>
+
+        <button
+          onClick={() => setFilters({
+            sortBy: "",
+            order: "",
+            minPrice: "",
+            maxPrice: "",
+            category: "",
+            search: "",
+          })}
+          className="w-full bg-gray-800 hover:bg-gray-900 text-white py-3 rounded-lg transition-all font-semibold"
+        >
+          Clear Filters
+        </button>
+      </aside>
+
+     
+      <main className="flex-1">
+        {productData.length === 0 ? (
+          <p className="text-center text-xl font-semibold text-gray-500">
+            No products found.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {productData.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <div className="aspect-square overflow-hidden bg-gray-50">
+                  <img
+                    src={item.images[0]}
+                    alt={item.name}
+                    className="h-full w-full object-contain hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4">
+                  <h2 className="font-semibold text-gray-800 text-lg mb-2 line-clamp-2 min-h-[56px]">
+                    {item.name}
+                  </h2>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-xl font-bold text-gray-900">${item.price}</p>
+                  </div>
+                  <Link
+                    href={`/product/${item.id}`}
+                    className="mt-4 block text-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-semibold"
+                  >
+                    View Details
+                  </Link>
+                </div>
               </div>
-              <div className="flex flex-col">
-                {product.name}
-                <span className="text-sm text-gray-500">
-                  {product.description}
-                </span>
-                <span className="text-sm text-gray-500">
-                  Quantity: {product.quantity}
-                </span>
-                <span className="text-lg font-semibold mt-2">
-                  Price: ${product.price}
-                </span>
-                <Link
-                  href={`/product/${product.id}`}
-                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg text-center"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <Footer />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
-}
+};
 
-
-
-
-
-
-
-
-// "use client";
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// const HomePage = () => {
-//   // State for categories, filters, and products
-//   const [categories, setCategories] = useState<string[]>([]);
-//   const [products, setProducts] = useState<{ id: number; name: string; description: string; price: number; image: string }[]>([]);
-//   const [filters, setFilters] = useState({
-//     category: '',
-//     minPrice: 0,
-//     maxPrice: 1000,
-//     search: '',
-//     sortBy: 'price',
-//     order: 'desc',
-//   });
-//   console.log(products);
-  
-//   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
-
-
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         // Assuming you have a predefined list of categories
-//         const response = await axios.get('http://localhost:8000/api/product-filters'); 
-//         setCategories(['Electronics', 'Clothing', 'Books','Footwear', 'Home & Kitchen']); 
-//       } catch (error) {
-//         console.error('Error fetching categories:', error);
-//       }
-//     };
-    
-//     fetchCategories();
-//   }, []);
-
-//   // Fetch filtered products based on filters
-//   const fetchProducts = async () => {
-//     try {
-//       const { category, minPrice, maxPrice, search, sortBy, order } = filters;
-//       const response = await axios.get('http://localhost:8000/api/product-filters', {
-//         params: {
-//           category,
-//           minPrice,
-//           maxPrice,
-//           search,
-//           sortBy,
-//           order,
-//         },
-//       });
-//       setProducts(response.data.data);
-//     } catch (error) {
-//       console.error('Error fetching products:', error);
-//     }
-//   };
-
-//   // Call fetchProducts when filters change
-//   useEffect(() => {
-//     fetchProducts();
-//   }, [filters]);
-
-//   // Handle filter change
-//   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-//     setFilters({
-//       ...filters,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   // Handle price range change
-//   interface PriceRange {
-//     min: number;
-//     max: number,
-//   }
-
-//   const handlePriceRangeChange = (min: number, max: number): void => {
-//     setFilters((prevFilters) => ({
-//       ...prevFilters,
-//       minPrice: min,
-//       maxPrice: max,
-//     }));
-//   };
-
-//   return (
-//     <div className="container mx-auto p-4">
-//       <div className="flex justify-between items-center mb-4">
-//         <h1 className="text-3xl font-bold">Products</h1>
-//         <div className="space-x-4">
-//           {/* Category Filter */}
-//           <select
-//             name="category"
-//             value={filters.category}
-//             onChange={handleFilterChange}
-//             className="p-2 border border-gray-300 rounded"
-//           >
-//             <option value="">All Categories</option>
-//             {categories.map((category) => (
-//               <option key={category} value={category}>
-//                 {category}
-//               </option>
-//             ))}
-//           </select>
-
-//           {/* Price Range Filter */}
-//           <div className="flex items-center space-x-2">
-//             <input
-//               type="number"
-//               value={filters.minPrice}
-//               onChange={(e) => handlePriceRangeChange(Number(e.target.value), filters.maxPrice)}
-//               className="p-2 border border-gray-300 rounded"
-//               placeholder="Min Price"
-//             />
-//             <input
-//               type="number"
-//               value={filters.maxPrice}
-//               onChange={(e) => handlePriceRangeChange(filters.minPrice, Number(e.target.value))}
-//               className="p-2 border border-gray-300 rounded"
-//               placeholder="Max Price"
-//             />
-//           </div>
-
-//           {/* Search Filter */}
-//           <input
-//             type="text"
-//             name="search"
-//             value={filters.search}
-//             onChange={handleFilterChange}
-//             className="p-2 border border-gray-300 rounded"
-//             placeholder="Search"
-//           />
-
-//           {/* Sort By Filter */}
-//           <select
-//             name="sortBy"
-//             value={filters.sortBy}
-//             onChange={handleFilterChange}
-//             className="p-2 border border-gray-300 rounded"
-//           >
-//             <option value="price">Price</option>
-//             <option value="createdAt">New Arrivals</option>
-//           </select>
-
-//           {/* Order Filter */}
-//           <select
-//             name="order"
-//             value={filters.order}
-//             onChange={handleFilterChange}
-//             className="p-2 border border-gray-300 rounded"
-//           >
-//             <option value="asc">Ascending</option>
-//             <option value="desc">Descending</option>
-//           </select>
-//         </div>
-//       </div>
-
-//       {/* Display Products */}
-//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-//         {products.length === 0 ? (
-//           <div>No products found.</div>
-//         ) : (
-//           products.map((product) => (
-//             <div key={product.id} className="border p-4 rounded-lg shadow-lg">
-//               <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4" />
-//               <h3 className="text-xl font-semibold">{product.name}</h3>
-//               <p className="text-gray-600">{product.description}</p>
-//               <div className="mt-2">
-//                 <span className="text-lg font-bold">${product.price}</span>
-//               </div>
-//             </div>
-//           ))
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default HomePage;
-
-
-
-
-
+export default Home;

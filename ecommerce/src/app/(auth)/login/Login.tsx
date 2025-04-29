@@ -45,35 +45,85 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-gradient-to-t from-white py-14 pb-48">
-      <div className=" w-[430px] max-sm:w-[300px] max-sm:pt-3 m-auto px-8 my-10 bg-white py-6 shadow-lg shadow-neutral-500 rounded-xl">
-        <h2 className="text-3xl py-5 text-blue-500">Sign in</h2>
-        <form action="" onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your Email"
-            className="py-2 px-2 border"
-            value={formData.email}
-            onChange={hanldeChangeEvent}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            className="py-2 px-2 border"
-            value={formData.password}
-            onChange={hanldeChangeEvent}
-          />
-          <button className="bg-blue-600 text-white px-5 py-2 my-2 rounded-lg w-full m-auto hover:bg-blue-800">
-            Submit
-          </button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            Welcome back
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Please sign in to your account
+          </p>
+        </div>
+        
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={hanldeChangeEvent}
+                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={formData.password}
+                onChange={hanldeChangeEvent}
+                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              Sign in
+            </button>
+          </div>
         </form>
-        <div className="text-center my-2">
-          <span>Don't have an account ? </span>
-          <Link href="/register" className="text-blue-500">
-            Register
-          </Link>
+
+        <div className="text-center">
+          <div className="text-sm">
+            <span className="text-gray-500">Don't have an account?</span>{" "}
+            <Link
+              href="/register"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+            >
+              Sign up
+            </Link>
+          </div>
+          
+          <div className="mt-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+               
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

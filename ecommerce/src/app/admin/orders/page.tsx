@@ -1,233 +1,166 @@
-// // "use client";
-// // import { useEffect, useState } from "react";
-// // import { useRouter } from "next/navigation";
-// // import { deleteProduct, getAllProducts } from "@/lib/api";
+"use client";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-// // export default function AdminProductsPage() {
-// //   const [products, setProducts] = useState<{ id: number; name: string; price: number; images: string[] }[]>([]);
-// //   const router = useRouter();
-// //   console.log(products);
-  
+interface Order {
+  order_id: number;
+  status: string;
+  buyer: {
+    id: number;
+    name: string;
+  };
+  products: {
+    product_id: number;
+    name: string;
+    quantity: number;
+  }[];
+}
 
-// //   useEffect(() => {
-// //     getAllProducts().then(res=> setProducts(res.data));
-// //   }, []);
-
-// //   const handleDelete = async (id: number) => {
-// //     const res=await deleteProduct(id);
-// //     if(res===200){
-// //         await getAllProducts().then(res=> setProducts(res.data));
-// //     }
-// //     // setProducts(products.filter((p: any) => p.id !== id));
-// //   };
-
-// //   return (
-// //     <div className="p-4">
-// //       <h1 className="text-xl font-bold mb-4">Product Management</h1>
-// //       <ul className="space-y-4">
-// //         {products.map((product) => (
-// //           <li
-// //             key={product.id}
-// //             className="border p-3 rounded-md flex justify-between"
-// //           >
-// //             <div>
-// //               <p>
-// //                 <p>
-// //                      <b>
-// //                         Image:<img src={product.images[0]} alt={product.name} width={50} height={50} />
-// //                      </b>
-                     
-// //                 </p>
-// //                 <b>Name:</b> {product.name}
-// //               </p>
-// //               <p>
-// //                 <b>Price:</b> ${product.price}
-// //               </p>
-// //             </div>
-// //             <div className="space-x-2">
-// //               <button
-// //                 className="bg-blue-500 text-white px-3 py-1 rounded"
-// //                 onClick={() =>
-// //                   router.push(`/admin/products/edit/${product.id}`)
-// //                 }
-// //               >
-// //                 Edit
-// //               </button>
-// //               <button
-// //                 className="bg-red-500 text-white px-3 py-1 rounded"
-// //                 onClick={() => handleDelete(product.id)}
-// //               >
-// //                 Delete
-// //               </button>
-// //             </div>
-// //           </li>
-// //         ))}
-// //       </ul>
-// //     </div>
-// //   );
-// // }
-
-
-
-
-
-
-
-
-
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-
-// interface Order {
-//   Order_id: number;
-//   status: string;
-//  buyer:{
-//     id: number;
-//     name: string;
-//  },
-//  products:{
-//     product_id: number;
-//     name: string;
-//     quantity: number;
-//   }[]
-//  }
-
-
-
-// export default function AllProductsPage() {
-//   const [orders, setOrders] = useState<Order[]>([]);
-//   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
-
-//   const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
-//   console.log(orders);
-  
-
-//   const fetchOrder = async () => {
-//     try {
-//       const res = await fetch("http://localhost:8000/api/orders");
-//       const data = await res.json();
-//       setOrders(data.data);
-//     } catch (err) {
-//       console.error("Failed to fetch orders", err);
-//     }
-//   };
-
-//   const handleDelete = async (id: number) => {
-//     try {
-//       const res = await fetch(`http://localhost:8000/api/orders/${id}`, {
-//         method: "DELETE",
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       const data = await res.json();
-//       if (res.status === 200) {
-
-//         setOrders(orders.filter((order) => order.Order_id !== id));
-//         alert("Order deleted successfully");
-//         // const res = await fetchProducts();
-//         // setProducts(res.data);
-//       } else {
-//         alert(data.message || "Failed to delete");
-//       }
-//     } catch (err) {
-//       console.error("Delete error", err);
-//     }
-//   };
+const AllOrdersPage = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  //const [loading, setLoading] = useState<boolean>(false);
+  const [orderId, setOrderId] = useState<number | null>(null);
+  const [orderStatus, setOrderStatus] = useState<string>("");
+  console.log(orderStatus);
 
   
+  const fetchOrders = async () => {
+    try {
+      //setLoading(true);
+      const response = await axios.get("http://localhost:8000/api/orders", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+     // setLoading(false);
+     console.log("1");
+     
+    }
+  };
 
-//   useEffect(() => {
-//     fetchOrder();
-//   }, []);
-//   console.log(orders);
-  
+  const deleteOrder = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/orders/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setOrders((prev) => prev.filter((order) => order.order_id !== id));
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  };
 
-//   return (
-//     <div className="container mx-auto p-4">
-//       <h1 className="text-2xl font-bold mb-4">All Products</h1>
-//       <table className="w-full border">
-//         <thead>
-//           <tr className="bg-gray-200 text-left">
-//             <th className="p-2">OrderId</th>
-//             <th className="p-2">BuyerId</th>
-//             <th className="p-2">Buyer_Name</th>
-//             <th className="p-2">Product_Name</th>
-//             <th className="p-2">Quantity</th>
-//             <th className="p-2">Status</th>
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {orders.map((order) => (
-//             <tr key={order.Order_id} className="border-t">
-//               <td className="p-2">{order.buyer.name}</td>
-//               <td className="p-2">
-//                 {editingOrder?.Order_id === order.Order_id ? (
-//                   <input
-//                     type="number"
-//                     value={editingOrder.buyer.id}
-//                     onChange={(e) =>
-//                       setEditingOrder({ ...editingOrder, buyer.id: parseFloat(e.target.value) })
-//                     }
-//                     className="border px-2 py-1 w-20"
-//                   />
-//                 ) : (
-//                   `$${order.price}`
-//                 )}
-//               </td>
-//               <td className="p-2">
-//                 {editingOrder?.id === order.id ? (
-//                   <input
-//                     type="number"
-//                     value={editingOrder.quantity}
-//                     onChange={(e) =>
-//                       setEditingOrder({ ...editingOrder, quantity: parseInt(e.target.value) })
-//                     }
-//                     className="border px-2 py-1 w-20"
-//                   />
-//                 ) : (
-//                   order.quantity
-//                 )}
-//               </td>
-//               <td className="p-2 space-x-2">
-//                 {editingOrder?.id === order.id ? (
-//                   <>
-//                     {/* <button
-//                       onClick={handleUpdate}
-//                       className="bg-green-500 text-white px-3 py-1 rounded"
-//                     >
-//                       Save
-//                     </button> */}
-//                     <button
-//                       onClick={() => setEditingOrder(null)}
-//                       className="bg-gray-400 text-white px-3 py-1 rounded"
-//                     >
-//                       Cancel
-//                     </button>
-//                   </>
-//                 ) : (
-//                   <>
-//                     <button
-//                       onClick={() => setEditingOrder(order)}
-//                       className="bg-blue-500 text-white px-3 py-1 rounded"
-//                     >
-//                       Edit
-//                     </button>
-//                     <button
-//                       onClick={() => handleDelete(order.id)}
-//                       className="bg-red-500 text-white px-3 py-1 rounded"
-//                     >
-//                       Delete
-//                     </button>
-//                   </>
-//                 )}
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
+  const editOrder = (id: number, status: string) => {
+    setOrderId(id);
+    setOrderStatus(status);
+  };
+  const updateStatus = async () => {
+    const orderState = {
+      status: orderStatus,
+    }
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/orders/${orderId}/status`,orderState,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(response.status);
+
+      if (response.status === 200) {
+        alert("Status updated successfully");
+        fetchOrders();
+      }
+    } catch (err) {
+      console.error("Error updating order status:", err);
+    }
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">All Orders</h1>
+      <select
+        name=""
+        id=""
+        value={orderStatus}
+        onChange={(e) => setOrderStatus(e.target.value)}
+        className="mb-4 p-2 border rounded"
+      >
+        <option value="">None</option>
+        <option value="PENDING"> PENDING</option>
+        <option value="PROCESSING">PROCESSING</option>
+        <option value="SHIPPED">SHIPPED</option>
+        <option value="DELIVERED">DELIVERED</option>
+        <option value="CANCELLED">CANCELLED</option>
+      </select>
+      <button
+        onClick={() => updateStatus()}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Add
+      </button>
+      {false ? (
+        <p>Loading orders...</p>
+      ) : (
+        <table className="min-w-full border border-gray-200 text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border px-3 py-2">ID</th>
+              <th className="border px-3 py-2">Buyer</th>
+              <th className="border px-3 py-2">Product_id</th>
+              <th className="border px-3 py-2">Product_Name</th>
+              <th className="border px-3 py-2">Status</th>
+              <th className="border px-3 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) =>
+              order.products.map((product) => (
+                <tr key={order.order_id} className="text-center">
+                  <td className="border px-3 py-1">{order.order_id}</td>
+                  <td className="border px-3 py-1">{order.buyer.name}</td>
+                  <td className="border px-3 py-1">{product.product_id}</td>
+                  <td className="border px-3 py-1">{product.name}</td>
+                  <td className="border px-3 py-1">{order.status}</td>
+                  <td className="border px-3 py-1">
+                    <button
+                      onClick={() => editOrder(order.order_id, order.status)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteOrder(order.order_id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+            {orders.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-4">
+                  No orders found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default AllOrdersPage;

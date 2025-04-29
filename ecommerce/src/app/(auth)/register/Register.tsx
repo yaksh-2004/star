@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 import { RegisterTypes } from "@/type";
 import { RegisterUser } from "@/lib/auth";
 
-
 export default function Register() {
   const [formData, setFormData] = useState<RegisterTypes>({
     name: "",
@@ -16,13 +15,8 @@ export default function Register() {
     role: "Buyer",
   });
 
-  // const [name, setName] = useState('')
-  // const [email, setEmail] = useState('')
-  // const [password, setPassword] = useState('')
   const [confirmpassword, setConfirmpassword] = useState("");
-  // const [role, setRole] = useState('Buyer')
   const [error, setError] = useState("");
-  console.log(formData);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -36,114 +30,163 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
     if (formData.password.length < 8) {
-      setError("password must be 8 characters long");
+      setError("Password must be 8 characters long");
       return;
     }
     if (formData.password !== confirmpassword) {
-      setError("password and confirm password must be same");
+      setError("Password and confirm password must be same");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       setError("Email address is not correct");
       return;
     }
-
     if (!/[!@#$%^&*()<>,."]/.test(formData.password)) {
-      setError("password must contain special character");
+      setError("Password must contain special character");
       return;
     }
     if (!/[A-Z]/.test(formData.password)) {
-      setError("password must contain capital latter");
+      setError("Password must contain capital letter");
       return;
     }
-
 
     try {
       await RegisterUser(formData);
       alert("Registration successful");
-    }
-  
-     catch (err) {
+    } catch (err) {
       alert("Registration failed");
       console.log(err);
     }
     redirect("/login");
   };
 
- 
-
   return (
-    <div className="bg-gradient-to-t from-white py-6 pb-20">
-      <div className=" w-[450px] max-sm:w-[300px] max-sm:pt-3 max-sm:my-4 m-auto px-10 my-10 bg-white py-8 shadow-lg shadow-neutral-500 rounded-xl">
-        <h2 className="text-3xl pb-4 text-blue-500">Sign Up</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            Create your account
+          </h2>
+      
+        </div>
 
-        <form onSubmit={handleSubmit} action="" className="flex flex-col gap-6">
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter your name"
-            required
-            className="py-2 px-2 border border-gray-300"
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+               Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Enter your name"
+                required
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your Email"
-            required
-            className="py-2 px-2 border border-gray-300"
-            value={formData.email}
-            onChange={handleChange}
-          />
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            required
-            className="py-2 px-2 border border-gray-300"
-            value={formData.password}
-            onChange={handleChange}
-          />
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
 
-          <input
-            type="password"
-            placeholder="Comfirm password"
-            required
-            className="py-2 px-2 border border-gray-300"
-            value={confirmpassword}
-            onChange={(e) => {
-              setConfirmpassword(e.target.value);
-            }}
-          />
-          <select
-            className="py-2.5 px-2 border border-gray-300"
-            value={formData.role}
-            name="role"
-            required
-            onChange={handleChange}
-          >
-            <option value="Buyer">Buyer</option>
-            <option value="Seller">Seller</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+            <div>
+              <label htmlFor="confirmpassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmpassword"
+                placeholder="Confirm your password"
+                required
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                value={confirmpassword}
+                onChange={(e) => setConfirmpassword(e.target.value)}
+              />
+            </div>
 
-          {error && <p className="text-red-500">{error}</p>}
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                Account Type
+              </label>
+              <select
+                id="role"
+                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                value={formData.role}
+                name="role"
+                required
+                onChange={handleChange}
+              >
+                <option value="Buyer">Buyer</option>
+                <option value="Seller">Seller</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+            </div>
+          </div>
 
-          <button className="bg-blue-600 text-white px-5 my-1 py-2 rounded-lg w-full m-auto hover:bg-blue-700">
-            Submit
-          </button>
+          {error && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-red-800">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+            >
+              Create Account
+            </button>
+          </div>
         </form>
 
         <div className="text-center mt-4">
-          <span>already have an account ? </span>
-          <Link href="/login" className="text-blue-500">
-            login
-          </Link>
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+            >
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>

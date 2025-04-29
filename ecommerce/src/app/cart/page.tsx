@@ -100,7 +100,7 @@ const CartPage = () => {
   if (loading) return <p className="text-center mt-10">Loading cart...</p>;
 
   return (
-    <div>
+    <div className="h-screen">
    <div>
     <Link href="/" className="text-blue-500 hover:underline">
       Shop More
@@ -176,4 +176,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
