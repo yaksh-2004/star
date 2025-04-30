@@ -52,6 +52,7 @@ export default function Admin() {
       console.error(err);
       alert("Something went wrong!");
     }
+    finally{
     setName("");
     setDesc("");
     setPrice("");
@@ -59,6 +60,7 @@ export default function Admin() {
     setImages([]);
     setPreviewUrls([]);
     setQuantity("");
+    }
   };
 
   return (
@@ -74,7 +76,7 @@ export default function Admin() {
           className="w-full p-2 border rounded"
           required
         />
-       <select name="" id="" onChange={e => setCategory(e.target.value)} className="w-full p-2 border rounded">
+       <select name="" id="" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2 border rounded">
         <option value="">Select Category</option>
         <option value="Clothing">Clothing</option>
         <option value="Electronics">Electronics</option>
