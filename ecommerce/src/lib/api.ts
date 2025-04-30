@@ -15,10 +15,6 @@ export const addToCart = async (productId: number, quantity: number) => {
 };
 export const getUser= () => 
 
-    // const token = localStorage.getItem("token");
-    // if (!token) {
-    //     throw new Error("Token not found");
-    // }
   api.get("/auth/me", {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

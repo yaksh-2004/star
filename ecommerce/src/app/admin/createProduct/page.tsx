@@ -52,6 +52,13 @@ export default function Admin() {
       console.error(err);
       alert("Something went wrong!");
     }
+    setName("");
+    setDesc("");
+    setPrice("");
+    setCategory("");
+    setImages([]);
+    setPreviewUrls([]);
+    setQuantity("");
   };
 
   return (
@@ -130,6 +137,7 @@ export default function Admin() {
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+   
         >
           Create Product
         </button>
