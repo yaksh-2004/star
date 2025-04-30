@@ -28,10 +28,11 @@ export default function BuyerDashboard() {
 
     const fetchOrders = async () => {
       try {
-        const data = (await getBuyerOrders(token)).map((order: any) => ({
+        const data = (await getBuyerOrders()).map((order: any) => ({
           ...order,
           order_id: Number(order.order_id),
         }));
+   
         setOrders(data);
         console.log(data);
       } catch (error) {
@@ -43,13 +44,13 @@ export default function BuyerDashboard() {
 
     fetchOrders();
   }, [token]);
-
+  console.log(orders);
   if (loading)
     return <p className="text-center mt-8">Loading your orders...</p>;
-  console.log(orders[0].buyer.name);
+//  console.log(orders.buyer.name);
 
   return (
-    <div >
+    <div className="bg-gray-100 min-h-screen mt-15">
       <div className="container mx-auto p-4">
         <h2 className="text-xl font-semibold mb-4 mt-0.5 float-right">
           User:{orders[0].buyer.name}
