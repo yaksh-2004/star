@@ -16,6 +16,7 @@ interface Product {
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [search, setSearch] = useState<string>("");
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
 
@@ -90,6 +91,13 @@ export default function AllProductsPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">All Products</h1>
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search by product name"
+        className="border p-2 mb-4 w-full" 
+      />
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-200 text-left">
@@ -101,7 +109,7 @@ export default function AllProductsPage() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products.filter((value)=>search.toLowerCase()===""? value: value.name.startsWith(search)).map((product) => (
             <tr key={product.id} className="border-t">
               <td className="p-2">{product.name}</td>
               <td className="p-2">

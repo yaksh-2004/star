@@ -7,6 +7,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<
     { id: number; name: string; email: string; role: string }[]
   >([]);
+  const [search, setSearch] = useState<string>("");
   console.log(users);
   console.log(users);
   
@@ -62,13 +63,21 @@ export default function UsersPage() {
       alert("Error deleting User");
     }
   }
+  
 
 
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">All Users</h1>
+      <input
+        type="text"
+        placeholder="Search by Name"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border p-2 mb-4 rounded w-full"
+      />
       <ul className="space-y-2">
-        {users.map((user) => (
+        {users.filter((value)=>search.toLowerCase()===""? value: value.name.startsWith(search)).map((user) => (
           <li key={user.id} className="border p-3 rounded-md">
             <p>
               <b>Name:</b> {user.name}

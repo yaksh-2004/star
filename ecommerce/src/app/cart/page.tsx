@@ -100,7 +100,7 @@ const CartPage = () => {
   if (loading) return <p className="text-center mt-10">Loading cart...</p>;
 
   return (
-    <div className="h-screen">
+    <div className="min-h-screen bg-gray-100 mt-20">
    <div>
     <Link href="/" className="text-blue-500 hover:underline">
       Shop More

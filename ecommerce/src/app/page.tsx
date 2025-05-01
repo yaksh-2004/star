@@ -40,9 +40,9 @@ const Home = () => {
   }, [filters]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 px-4 py-10 max-w-[1440px] mx-auto min-h-screen">
+    <div className="flex gap-8 px-4 py-10 max-w-[1440px] mx-auto min-h-screen">
      
-      <aside className="lg:w-[300px] w-full bg-white rounded-xl p-6 shadow-md border border-gray-200 sticky top-24 h-fit">
+      <aside className="w-[300px]  bg-white rounded-xl p-6 shadow-md border border-gray-200 sticky top-24 h-fit">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6"> Product Filters</h2>
 
         <div className="space-y-5">
