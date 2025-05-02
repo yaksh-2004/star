@@ -1,6 +1,5 @@
 
 "use client";
-
 import React, { useEffect, useState } from "react";
 
 interface Product {
@@ -9,14 +8,17 @@ interface Product {
   description: string;
   price: number;
   quantity: number;
-  category:string;
+  category: string;
   images: string[];
 }
 
 export default function AllProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [search, setSearch] = useState<string>("");
+  const [sortdata, setSortData] = useState<"price" | "quantity" | "">("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
 
@@ -31,22 +33,17 @@ export default function AllProductsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    console.log(id);
-    
     try {
       const res = await fetch(`http://localhost:8000/api/products/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await res.json();
-      if (res.status=== 200) {
-
+      if (res.status === 200) {
         setProducts(products.filter((product) => Number(product.id) !== id));
         alert("Product deleted successfully");
-        // const res = await fetchProducts();
-        // setProducts(res.data);
       } else {
         alert(data.message || "Failed to delete");
       }
@@ -85,31 +82,78 @@ export default function AllProductsPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
-  console.log(products);
-  
+
+  const filteredProducts = products
+    .filter((product) =>
+      search.toLowerCase() === ""
+        ? true
+        : product.name.toLowerCase().startsWith(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      console.log(a, b);
+      
+      if (!sortdata) return 0;
+      console.log(sortdata);
+      
+
+      const field1 = a[sortdata];
+      console.log(field1);
+      
+      const field2 = b[sortdata];
+      console.log(field2);
+      
+
+      if (sortOrder === "asc") {
+        return field1 >field2  ? 1 : -1;
+      } else {
+        return field1 < field2 ? 1 : -1;
+      }
+    });
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">All Products</h1>
+
       <input
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search by product name"
-        className="border p-2 mb-4 w-full" 
+        className="border p-2 mb-4 w-full"
       />
+
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-200 text-left">
             <th className="p-2">Name</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Quantity</th>
+            <th
+              className="p-2 cursor-pointer"
+              onClick={() => {
+                setSortData("price");
+                setSortOrder((prev) =>
+                  sortdata === "price" && prev === "asc" ? "desc" : "asc"
+                );
+              }}
+            >
+              Price {sortdata === "price" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
+            </th>
+            <th
+              className="p-2 cursor-pointer"
+              onClick={() => {
+                setSortData("quantity");
+                setSortOrder((prev) =>
+                  sortdata === "quantity" && prev === "asc" ? "desc" : "asc"
+                );
+              }}
+            >
+              Quantity {sortdata === "quantity" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
+            </th>
             <th className="p-2">Category</th>
             <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {products.filter((value)=>search.toLowerCase()===""? value: value.name.startsWith(search)).map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product.id} className="border-t">
               <td className="p-2">{product.name}</td>
               <td className="p-2">
@@ -118,7 +162,10 @@ export default function AllProductsPage() {
                     type="number"
                     value={editingProduct.price}
                     onChange={(e) =>
-                      setEditingProduct({ ...editingProduct, price: parseFloat(e.target.value) })
+                      setEditingProduct({
+                        ...editingProduct,
+                        price: parseFloat(e.target.value),
+                      })
                     }
                     className="border px-2 py-1 w-20"
                   />
@@ -132,7 +179,10 @@ export default function AllProductsPage() {
                     type="number"
                     value={editingProduct.quantity}
                     onChange={(e) =>
-                      setEditingProduct({ ...editingProduct, quantity: parseInt(e.target.value) })
+                      setEditingProduct({
+                        ...editingProduct,
+                        quantity: parseInt(e.target.value),
+                      })
                     }
                     className="border px-2 py-1 w-20"
                   />
@@ -181,3 +231,4 @@ export default function AllProductsPage() {
     </div>
   );
 }
+

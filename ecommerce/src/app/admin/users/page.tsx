@@ -176,10 +176,10 @@ const UserPage = () => {
         placeholder="Search by Name"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border p-2 mb-4 rounded w-full"
+        className="border p-2 rounded w-full"
       />
         <div>
-        <table className='w-full border mt-12'>
+        <table className='w-full border mt-5'>
           <thead>
             <tr className='bg-gray-200 '>
               <th className='p-2'>ID</th>

@@ -8,6 +8,8 @@ const admin = () => {
    
        <div>
         <h1 className="text-gray">Welcome to the admin panel!</h1>
+       </div>
+       <div>
         
        </div>
     </div>
