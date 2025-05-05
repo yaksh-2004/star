@@ -106,7 +106,7 @@ export default function Login() {
 
         <div className="text-center">
           <div className="text-sm">
-            <span className="text-gray-500">Don't have an account?</span>{" "}
+            <span className="text-gray-500">Don &apos;t have an account?</span>{" "}
             <Link
               href="/register"
               className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"

@@ -28,10 +28,12 @@ export default function BuyerDashboard() {
 
     const fetchOrders = async () => {
       try {
-        const data = (await getBuyerOrders()).map((order: any) => ({
+        const data = (await getBuyerOrders()).map((order: Order) => ({
           ...order,
           order_id: Number(order.order_id),
         }));
+     
+        
    
         setOrders(data);
         console.log(data);

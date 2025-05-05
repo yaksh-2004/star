@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function VerifyMail() {
   const [email, setemail] = useState<string>("");
 
-  const handleSubmit= async (e: React.FormEvent) => {
+  const handleSubmit= async () => {
   }
 
 

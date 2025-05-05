@@ -19,7 +19,7 @@ export default function ProductInfoPage() {
   console.log(params.id);
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState(1);
+const quantity = 1;
   const router = useRouter();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function ProductInfoPage() {
 
   const handleAddToCart = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/cart`, {
+       await fetch(`http://localhost:8000/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

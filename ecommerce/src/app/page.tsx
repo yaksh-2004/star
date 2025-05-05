@@ -6,7 +6,14 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
-  const [productData, setProductData] = useState<any[]>([]);
+  interface Product {
+    id: string;
+    name: string;
+    price: number;
+    images?: string[];
+  }
+
+  const [productData, setProductData] = useState<Product[]>([]);
   const [filters, setFilters] = useState({
     sortBy: "",
     order: "",

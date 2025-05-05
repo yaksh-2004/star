@@ -1,5 +1,4 @@
 "use client"
-import { addProduct } from "@/lib/auth";
 import { useState } from "react";
 //import { useRouter } from "next/router";
 
@@ -33,7 +32,7 @@ export default function Admin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", desc)
@@ -45,7 +44,7 @@ export default function Admin() {
     });
 
     try {
-    const res = await addProduct(formData)
+    // const res = await addProduct(formData)
   alert("Product created successfully");
      
     } catch (err) {
@@ -124,7 +123,7 @@ export default function Admin() {
         <div className="flex flex-wrap gap-4">
           {previewUrls.map((url, i) => (
             <div key={i} className="relative">
-              <img src={url} className="w-24 h-24 object-cover rounded" />
+              <img src={url} alt="" className="w-24 h-24 object-cover rounded" />
               <button
                 type="button"
                 onClick={() => removeImage(i)}

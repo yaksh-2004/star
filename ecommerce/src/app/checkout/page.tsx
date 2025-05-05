@@ -32,7 +32,7 @@ export default function CheckoutPage() {
   //   const [cart, setCart] = useState<{ id: string; name: string; quantity: number; price: number }[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [address, setAddress] = useState("");
-  const [token, setToken] = useState("");
+  const [, setToken] = useState("");
   console.log(address);
   
 
@@ -102,7 +102,7 @@ export default function CheckoutPage() {
       }
     };
     fetchCart();
-  }, []);
+  }, [cart]);
 
   return (
     <div className="p-6 max-w-2xl mx-auto h-screen">
