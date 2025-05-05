@@ -109,9 +109,15 @@ export default function Login() {
             <span className="text-gray-500">Don &apos;t have an account?</span>{" "}
             <Link
               href="/register"
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200 mr-3"
             >
               Sign up
+            </Link>
+            <Link
+              href="/forgot-password"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+            >
+              forgot password
             </Link>
           </div>
           

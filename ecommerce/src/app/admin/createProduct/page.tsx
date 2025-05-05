@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import { useState } from "react";
 //import { useRouter } from "next/router";
 
@@ -123,7 +124,7 @@ export default function Admin() {
         <div className="flex flex-wrap gap-4">
           {previewUrls.map((url, i) => (
             <div key={i} className="relative">
-              <img src={url} alt="" className="w-24 h-24 object-cover rounded" />
+              <Image src={url} alt="" className="w-24 h-24 object-cover rounded" />
               <button
                 type="button"
                 onClick={() => removeImage(i)}

@@ -13,6 +13,7 @@ interface Product {
 }
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProductInfoPage() {
   const params = useParams();
@@ -76,14 +77,15 @@ const quantity = 1;
     <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mt-20">
    
       <div className="flex gap-8">
-        <div>
-          <img src={product.images[0]} alt="" className="w-[60px] mb-3" />
-          <img src={product.images[0]} alt="" className="w-[60px] mb-3" />
-          <img src={product.images[0]} alt="" className="w-[60px] mb-3" />
-          <img src={product.images[0]} alt="" className="w-[60px] mb-3" />
+          <Image src={product.images[0]} alt={product.name} width={500} height={500} className="w-[60px] mb-3"/>
+          <Image src={product.images[0]} alt={product.name} width={500} height={500} className="w-[60px] mb-3" />
+          <Image src={product.images[0]} alt={product.name} className="width={500} height={500} className=mb-3" />
+          <Image src={product.images[0]} alt={product.name}width={500} height={500} className="w-[60px] mb-3" />
+          <Image src={product.images[0]} alt={product.name} className="width={500} height={500} className= mb-3" />
+          
         </div>
         <div>
-          <img src={product.images[0]} alt="" className="w-[260px]" />
+          <Image src={product.images[0]} alt="" className="w-[260px]" />
         </div>
       </div>
       {/* <img src={product.images[0]} alt={product.name} className="w-full h-80 object-cover rounded-lg mb-4" />
@@ -108,7 +110,6 @@ const quantity = 1;
       >
         Add to Cart
       </button>
-    </div>
     </div>
     </div>
   );

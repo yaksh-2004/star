@@ -2,6 +2,7 @@
 "use client";
 
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -188,11 +189,12 @@ const Home = () => {
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300"
               >
                 <div className="aspect-square bg-gray-100 overflow-hidden rounded-t-xl">
-                  <img
-                    src={item.images?.[0]}
+                  {/* <Image
+                    src={item.images?.[0] || "/placeholder-image.png"}
                     alt={item.name}
                     className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                  />
+                  /> */}
+                  <Image src="/logo.webp" alt={item.name} width={500} height={500} className="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
                 </div>
                 <div className="p-4 flex flex-col justify-between h-[180px]">
                   <h3 className="text-md font-semibold text-gray-800 line-clamp-2">

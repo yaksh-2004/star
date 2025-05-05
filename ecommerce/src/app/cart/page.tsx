@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 type CartItem = {
   id: number;
@@ -118,7 +119,7 @@ const CartPage = () => {
               key={item.id}
               className="flex items-center justify-between border p-4 rounded mb-4"
             >
-              <img
+              <Image
                 src={item.image}
                 alt={item.name}
                 className="w-20 h-20 object-cover rounded"

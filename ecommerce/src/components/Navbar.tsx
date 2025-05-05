@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/api";
+import Image from "next/image";
 
 interface User {
   id: number;
@@ -47,9 +48,11 @@ const Navbar = () => {
               href="/"
               className="flex items-center hover:opacity-90 transition-opacity"
             >
-              <img
+              <Image
                 src="/logo.webp"
                 alt="Logo"
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full object-cover"
               />
               <span className="ml-3 text-xl font-semibold text-gray-800 hidden sm:block">

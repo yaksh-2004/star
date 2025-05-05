@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Image from "next/image";
 
 type CartItem = {
   id: number;
@@ -121,7 +122,7 @@ export default function CheckoutPage() {
             className="flex items-center justify-between border p-4 rounded mb-4"
           >
             <div className="flex items-center">
-              <img
+              <Image
                 src={item.image}
                 alt={item.name}
                 className="w-16 h-16 mr-4"
