@@ -46,7 +46,7 @@ export default function Admin() {
     });
 
     try {
-    const res = await addProduct(formData)
+     await addProduct(formData)
   alert("Product created successfully");
      
     } catch (err) {
