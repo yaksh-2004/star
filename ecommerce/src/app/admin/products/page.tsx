@@ -37,7 +37,7 @@ export default function AllProductsPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/products/${id}`, {
+      const res = await fetch(`${baseurl}/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ export default function AllProductsPage() {
   const handleUpdate = async () => {
     if (!editingProduct) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/products/${editingProduct.id}`, {
+      const res = await fetch(`${baseurl}/products/${editingProduct.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

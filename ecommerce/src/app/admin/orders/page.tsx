@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { baseurl } from "@/lib/api";
 
 interface Order {
   order_id: number;
@@ -38,7 +39,7 @@ const AllOrdersPage = () => {
 
   const deleteOrder = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:8000/api/orders/${id}`, {
+      await axios.delete(`${baseurl}/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -62,7 +63,7 @@ const AllOrdersPage = () => {
     }
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/orders/${orderId}/status`,
+        `${baseurl}/orders/${orderId}/status`,
          status ,
         {
           headers: {

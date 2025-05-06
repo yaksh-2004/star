@@ -14,6 +14,7 @@ interface Product {
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { baseurl } from "@/lib/api";
 
 export default function ProductInfoPage() {
   const params = useParams();
@@ -27,7 +28,7 @@ const quantity = 1;
     const fetchProduct = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/products/${params.id}`
+          `${baseurl}/products/${params.id}`
         );
         const data = await res.json();
         console.log(data.data);
@@ -46,7 +47,7 @@ const quantity = 1;
 
   const handleAddToCart = async () => {
     try {
-       await fetch(`http://localhost:8000/api/cart`, {
+       await fetch(`${baseurl}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

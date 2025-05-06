@@ -99,6 +99,7 @@
 // }
 
 "use client";
+import { baseurl } from '@/lib/api';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 interface User {
@@ -116,7 +117,7 @@ const UserPage = () => {
         const fetchUsers = async () => {
           try {
             const res = await axios.get(
-              "http://localhost:8000/api/admin/users",
+              `${baseurl}/admin/users`,
     
               {
                 headers: {
@@ -143,7 +144,7 @@ const UserPage = () => {
       const handleDelete = async (id: number) => {
         try {
           const res = await axios.delete(
-            `http://localhost:8000/api/admin/users/${id}`,
+            `${baseurl}/admin/users/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

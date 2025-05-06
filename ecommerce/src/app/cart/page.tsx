@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { baseurl } from "@/lib/api";
 
 type CartItem = {
   id: number;
@@ -37,7 +38,7 @@ const CartPage = () => {
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:8000/api/cart", {
+      const res = await fetch(`${baseurl}/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -56,7 +57,7 @@ const CartPage = () => {
     if (!token) return;
 
     try {
-      await fetch(`http://localhost:8000/api/cart/${id}`, {
+      await fetch(`${baseurl}/cart/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ const CartPage = () => {
     if (!token) return;
 
     try {
-      await fetch(`http://localhost:8000/api/cart/${id}`, {
+      await fetch(`${baseurl}/cart/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

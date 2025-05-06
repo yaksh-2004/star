@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import { baseurl } from "@/lib/api";
 
 type CartItem = {
   id: number;
@@ -56,7 +57,7 @@ export default function CheckoutPage() {
   const handleConfirmOrder = async () => {
  
     try{
-      const res = await axios.post("http://localhost:8000/api/orders", productObj,{
+      const res = await axios.post(`${baseurl}/orders`, productObj,{
 
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -87,7 +88,7 @@ export default function CheckoutPage() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:8000/api/cart", {
+        const res = await fetch(`${baseurl}/cart`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
