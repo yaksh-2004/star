@@ -68,24 +68,22 @@ const quantity = 1;
 
    
 
- <div className="flex items-center">
+ <div className="flex flex-col items-center rounded-lg shadow-md p-10">
   <div>
     <Link href="/" className="text-blue-500 hover:underline absolute top-20">
       Back to Products
     </Link>
   </div>
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mt-20">
+    <div className="w-80 flex gap-5 mx-auto p-6 bg-white ">
    
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-8">
           <Image src={product.images[0]} alt={product.name} width={500} height={500} className="w-[60px] mb-3"/>
           <Image src={product.images[0]} alt={product.name} width={500} height={500} className="w-[60px] mb-3" />
-          <Image src={product.images[0]} alt={product.name} className="width={500} height={500} className=mb-3" />
-          <Image src={product.images[0]} alt={product.name}width={500} height={500} className="w-[60px] mb-3" />
-          <Image src={product.images[0]} alt={product.name} className="width={500} height={500} className= mb-3" />
+          <Image src={product.images[0]} alt={product.name}  width={500} height={500} className="w-[60px] mb-3" />
           
         </div>
         <div>
-          <Image src={product.images[0]} alt="" className="w-[260px]" />
+          <Image src={product.images[0]} alt={product.name}  width={500} height={500} className="w-[260px]" />
         </div>
       </div>
       {/* <img src={product.images[0]} alt={product.name} className="w-full h-80 object-cover rounded-lg mb-4" />
