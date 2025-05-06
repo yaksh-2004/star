@@ -1,4 +1,5 @@
 "use client"
+import { addProduct } from "@/lib/auth";
 import Image from "next/image";
 import { useState } from "react";
 //import { useRouter } from "next/router";
@@ -45,7 +46,7 @@ export default function Admin() {
     });
 
     try {
-    // const res = await addProduct(formData)
+    const res = await addProduct(formData)
   alert("Product created successfully");
      
     } catch (err) {
