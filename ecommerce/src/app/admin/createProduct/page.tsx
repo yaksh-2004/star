@@ -124,7 +124,7 @@ export default function Admin() {
         <div className="flex flex-wrap gap-4">
           {previewUrls.map((url, i) => (
             <div key={i} className="relative">
-              <Image src={url} alt="" className="w-24 h-24 object-cover rounded" />
+              <Image src={url} alt=""  width={500} height={500} className="w-24 h-24 object-cover rounded" />
               <button
                 type="button"
                 onClick={() => removeImage(i)}

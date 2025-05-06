@@ -1,5 +1,6 @@
 
 "use client";
+import { baseurl } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 
 interface Product {
@@ -24,7 +25,9 @@ export default function AllProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/products");
+      const res = await fetch(`${baseurl}/products`);
+      console.log(res);
+      
       const data = await res.json();
       setProducts(data.data);
     } catch (err) {
