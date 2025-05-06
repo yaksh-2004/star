@@ -2,14 +2,21 @@
 "use client";
 import { forgotPassword } from "@/lib/auth";
 import { useState } from "react";
+ export interface EmailObject {
+  email: string;
+}
 
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string>("");
+
+  const emailObject:EmailObject = {
+    email:email
+  }
 
   const handleSubmit = async () => {
     try {
-      await forgotPassword(email);
+      await forgotPassword(emailObject);
       alert("Reset link sent to your email");
     } catch {
       alert("Failed to send reset email");

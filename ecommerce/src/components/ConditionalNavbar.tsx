@@ -26,5 +26,6 @@ if(pathname.startsWith("/admin")){
     if(pathname.startsWith("/reset-password")){
         return null;
     }
+    return <Navbar/>
   
 }

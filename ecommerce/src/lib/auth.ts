@@ -1,6 +1,8 @@
 
 import { LoginTypes, RegisterTypes } from "@/type";
 import api from "./api";
+import { EmailObject } from "@/app/(auth)/forgot-password/page";
+import { ResetPasswordTypes } from "@/app/(auth)/reset-password/ResetPassword";
 
 
 
@@ -31,12 +33,16 @@ export const fetchUserData = async () => {
     }
     
 };
-export const forgotPassword = async (email: string) => {
-  const res = await api.post("/auth/forgot-password", { email });
-  return res.data;
+export const forgotPassword =  (email: EmailObject) => {
+ api.post("/auth/forgot-password", email );
+  
 };
 
-export const resetPassword = async ({ token, password }: { token: string; password: string }) => {
-  const res = await api.post("/auth/reset-password", { token, password });
-  return res.data;
+export const resetPassword = async (dataObj:ResetPasswordTypes) => {
+  await api.post("/auth/reset-password", dataObj,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
 };
