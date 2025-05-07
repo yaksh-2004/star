@@ -123,6 +123,8 @@ const CartPage = () => {
               <Image
                 src={item.image}
                 alt={item.name}
+                width={80}
+                height={80}
                 className="w-20 h-20 object-cover rounded"
               />
               <div className="flex-1 ml-4">

@@ -1,6 +1,7 @@
 
 "use client";
 
+import { baseurl } from "@/lib/api";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,7 +35,7 @@ const Home = () => {
       });
 
       const res = await axios.get(
-        `http://localhost:8000/api/product-filters?${queryParams.toString()}`
+        `${baseurl}/product-filters?${queryParams.toString()}`
       );
 
       setProductData(res.data.products || res.data.data);
@@ -196,7 +197,7 @@ const Home = () => {
                     height={500}
                     className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
                   />
-                  {/* <Image src="/ms-dhoni-spartan-seven-english-willow-cricket-bat.jpg" alt={item.name} width={500} height={500} className="w-full h-full object-contain hover:scale-105 transition-transform duration-300" /> */}
+               
                 </div>
                 <div className="p-4 flex flex-col justify-between h-[180px]">
                   <h3 className="text-md font-semibold text-gray-800 line-clamp-2">

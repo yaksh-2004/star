@@ -25,6 +25,8 @@ type productType = {
 type productObjType = {
   products: productType[];
   address: string;
+  city: string;
+  pincode: number;
   
 };
 
@@ -33,8 +35,10 @@ export default function CheckoutPage() {
   const router = useRouter();
   //   const [cart, setCart] = useState<{ id: string; name: string; quantity: number; price: number }[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [address, setAddress] = useState("");
-  const [, setToken] = useState("");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [pincode, setPincode] = useState<number>(0);
+  const [ ,setToken] = useState("");
   console.log(address);
   
 
@@ -51,6 +55,8 @@ export default function CheckoutPage() {
   const productObj:productObjType={
     products: productarr,
     address: address,
+    city: city,
+    pincode: pincode,
   }
   console.log(productObj);
 
@@ -108,7 +114,12 @@ export default function CheckoutPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto h-screen">
-      <h1 className="text-2xl font-semibold mb-4">Checkout</h1>
+ <div className="p-5 shadow-md rounded-lg bg-white">
+      <h1 className="text-2xl font-semibold mb-4 mt-10">Checkout</h1>
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium text-gray-700">
+          Shipping Address
+        </label>
 
       <textarea
         className="w-full p-2 border rounded mb-4"
@@ -116,6 +127,29 @@ export default function CheckoutPage() {
         value={address}
         onChange={(e) => setAddress(e.target.value)}
       />
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        City
+      </label>
+      <input
+        type="text"
+        className="w-full p-2 border rounded mb-4"
+        placeholder="Enter your city..."
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      />
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        Pin Code
+      </label>
+      <input
+        type="text"
+        className="w-full p-2 border rounded mb-4"
+        placeholder="Enter your pin code..."
+        value={pincode}
+        onChange={(e) => setPincode(Number(e.target.value))}
+      />
+
+      </div>
+   
       {cart.map((item) => {
         return (
           <div
@@ -126,6 +160,8 @@ export default function CheckoutPage() {
               <Image
                 src={item.image}
                 alt={item.name}
+                width={80}
+                height={80}
                 className="w-16 h-16 mr-4"
               />
               <div>
@@ -155,6 +191,8 @@ export default function CheckoutPage() {
         Confirm Order
       </button>
     </div>
+    </div>
+   
   );
 }
 
