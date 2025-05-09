@@ -39,7 +39,7 @@ export const getCart = async () => {
   return res.data;
 };
 export const getBuyerOrders = async () => {
-    const res = await fetch(`http://localhost:8000/api/orders`, {
+    const res = await fetch(`${baseurl}/orders`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
